@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Rock Paper Scissors</title>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <script>
+      function capitalize(str) {
+        let firstLetter = str.slice(0,1).toUpperCase()
+        let lastLetters = str.slice(1).toLowerCase()
+        return firstLetter + lastLetters
+      }
+
+      function computerPlay() {
+        let rps = ['Rock', 'Paper', 'Scissors']
+        let randomIndex = Math.floor(Math.random() * rps.length)
+        return rps[randomIndex]
+      }
+
+      function winRound(playerSelection, computerSelection) {
+        return 'You Win! ' + playerSelection + ' beats ' + computerSelection
+      }
+
+      function loseRound(playerSelection, computerSelection) {
+        return 'You Lose! ' + computerSelection + ' beats ' + playerSelection
+      }
+
+      function playRound(playerSelection, computerSelection) {
+        playerSelection = capitalize(playerSelection)
+
+        if (playerSelection == computerSelection) {
+          return 0
+
+        } else if (playerSelection == 'Rock') {
+          if (computerSelection == 'Paper') {
+            return -1
+          } else {
+            return 1
+          }
+
+        } else if (playerSelection == 'Paper') {
+          if (computerSelection == 'Scissors') {
+            return -1
+          } else {
+            return 1
+          }
+
+        } else if (playerSelection == 'Scissors') {
+          if (computerSelection == 'Rock') {
+            return -1
+          } else {
+            return 1
+          }
+        }
+      }
+
+      function game() {
+        let rounds = 5
+        let playerScore = 0
+        let computerScore = 0
+
+        for (let i = rounds - 1; i >= 0; i--) {
+          playerSelection = prompt('Please select Rock, Paper or Scissors')
+          computerSelection = computerPlay()
+          result = playRound(playerSelection, computerSelection)
+          if (result == 1) {
+            playerScore += 1
+            console.log(winRound(playerSelection, computerSelection))
+          } else if (result == -1) {
+            computerScore += 1
+            console.log(loseRound(playerSelection, computerSelection))
+          } else {
+            console.log('Draw')
+          }
+        }
+
+        if (playerScore > computerScore) {
+          return 'You Win! You beat the computer ' + playerScore + ' - ' + computerScore;
+        } else if (playerScore < computerScore) {
+          return 'You Lose! The computer beats you ' + computerScore + ' - ' + playerScore;
+        } else {
+          return 'Draw! You both won ' + playerScore + ' rounds!'
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -5,84 +5,94 @@
     <meta charset="utf-8">
   </head>
   <body>
+    <button id="Rock">Rock</button>
+    <button id="Paper">Paper</button>
+    <button id="Scissors">Scissors</button>
+    <div id="container"></div>
     <script>
-      function capitalize(str) {
-        let firstLetter = str.slice(0,1).toUpperCase()
-        let lastLetters = str.slice(1).toLowerCase()
-        return firstLetter + lastLetters
-      }
+
+      const container = document.querySelector('#container');
+
+      const displayRound = document.createElement('div');
+      displayRound.classList.add('result');
+      displayRound.textContent = 'Play your first Round!';
+
+      container.appendChild(displayRound);
+
+
+      let playerScore = 0
+      let computerScore = 0
+      const displayScore = document.createElement('div');
+      displayScore.classList.add('score');
+
+      container.appendChild(displayScore);
+
 
       function computerPlay() {
-        let rps = ['Rock', 'Paper', 'Scissors']
+
+        const rps = ['Rock', 'Paper', 'Scissors']
         let randomIndex = Math.floor(Math.random() * rps.length)
         return rps[randomIndex]
       }
 
       function winRound(playerSelection, computerSelection) {
-        return 'You Win! ' + playerSelection + ' beats ' + computerSelection
+
+        displayRound.textContent = 'You Win! ' + playerSelection + ' beats ' + computerSelection;
+        playerScore += 1;
       }
 
       function loseRound(playerSelection, computerSelection) {
-        return 'You Lose! ' + computerSelection + ' beats ' + playerSelection
+
+        displayRound.textContent =  'You Lose! ' + computerSelection + ' beats ' + playerSelection;
+        computerScore += 1;
+      }
+
+      function drawRound(playerSelection) {
+        displayRound.textContent =  'Draw! You both chose ' + playerSelection
       }
 
       function playRound(playerSelection, computerSelection) {
-        playerSelection = capitalize(playerSelection)
 
         if (playerSelection == computerSelection) {
-          return 0
+          drawRound(playerSelection, computerSelection);
 
-        } else if (playerSelection == 'Rock') {
-          if (computerSelection == 'Paper') {
-            return -1
-          } else {
-            return 1
-          }
+        } else if (playerSelection == 'Rock' && computerSelection == 'Paper') {
+          loseRound(playerSelection, computerSelection)
 
-        } else if (playerSelection == 'Paper') {
-          if (computerSelection == 'Scissors') {
-            return -1
-          } else {
-            return 1
-          }
+        } else if (playerSelection == 'Paper' && computerSelection == 'Scissors') {
+          loseRound(playerSelection, computerSelection)
 
-        } else if (playerSelection == 'Scissors') {
-          if (computerSelection == 'Rock') {
-            return -1
-          } else {
-            return 1
-          }
-        }
-      }
+        } else if (playerSelection == 'Scissors' && computerSelection == 'Rock') {
+          loseRound(playerSelection, computerSelection)
 
-      function game() {
-        let rounds = 5
-        let playerScore = 0
-        let computerScore = 0
-
-        for (let i = rounds - 1; i >= 0; i--) {
-          playerSelection = prompt('Please select Rock, Paper or Scissors')
-          computerSelection = computerPlay()
-          result = playRound(playerSelection, computerSelection)
-          if (result == 1) {
-            playerScore += 1
-            console.log(winRound(playerSelection, computerSelection))
-          } else if (result == -1) {
-            computerScore += 1
-            console.log(loseRound(playerSelection, computerSelection))
-          } else {
-            console.log('Draw')
-          }
-        }
-
-        if (playerScore > computerScore) {
-          return 'You Win! You beat the computer ' + playerScore + ' - ' + computerScore;
-        } else if (playerScore < computerScore) {
-          return 'You Lose! The computer beats you ' + computerScore + ' - ' + playerScore;
         } else {
-          return 'Draw! You both won ' + playerScore + ' rounds!'
+          winRound(playerSelection, computerSelection)
         }
       }
+
+      function updateScore() {
+        if(playerScore == 5) {
+          displayScore.textContent = 'You Win! Final Score: ' + playerScore + ' - ' + computerScore;
+          playerScore = 0;
+          computerScore = 0;
+        } else if(computerScore == 5) {
+          displayScore.textContent = 'You Lose! Final Score: ' + playerScore + ' - ' + computerScore;
+          playerScore = 0;
+          computerScore = 0;
+        } else {
+          displayScore.textContent = 'Player: ' + playerScore +
+            ' - Computer: ' + computerScore;
+        }
+      }
+
+      const buttons = document.querySelectorAll('button');
+      buttons.forEach((button) => {
+        button.addEventListener('click', (e) => {
+          playRound(button.id, computerPlay());
+          updateScore();
+        });
+      });
+
     </script>
   </body>
 </html>
